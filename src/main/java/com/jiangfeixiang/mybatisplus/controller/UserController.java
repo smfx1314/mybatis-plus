@@ -1,6 +1,8 @@
 package com.jiangfeixiang.mybatisplus.controller;
 
 
+import com.gitee.hengboy.mybatis.pageable.Page;
+import com.gitee.hengboy.mybatis.pageable.request.PageableRequest;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jiangfeixiang.mybatisplus.common.CommonReturnType;
@@ -8,6 +10,7 @@ import com.jiangfeixiang.mybatisplus.entity.User;
 import com.jiangfeixiang.mybatisplus.entity.UserAndPasswordModel;
 import com.jiangfeixiang.mybatisplus.mapper.PasswordMapper;
 import com.jiangfeixiang.mybatisplus.mapper.UserMapper;
+import com.jiangfeixiang.mybatisplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,27 +33,16 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private PasswordMapper passwordMapper;
+   @Autowired
+   private UserService userService;
 
     @RequestMapping("/getAllUser")
     @ResponseBody
-    public CommonReturnType getAllUser(@RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize){
-        PageHelper.startPage(1 ,pageSize);
-        List<UserAndPasswordModel> list = new ArrayList<>();
-        List<User> users = userMapper.selectList(null);
-        for (User user: users) {
-            UserAndPasswordModel userAndPasswordModel = new UserAndPasswordModel();
-            userAndPasswordModel.setId(user.getId());
-            userAndPasswordModel.setName(user.getName());
-            userAndPasswordModel.setPassword(passwordMapper.getByUserId(user.getId()).getPassword());
-            list.add(userAndPasswordModel);
-        }
+    public CommonReturnType page(@RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize){
+        PageHelper.startPage(1,pageSize);
+        List<UserAndPasswordModel> list = userService.page();
         PageInfo<UserAndPasswordModel> pageInfo = new PageInfo<>(list);
-        System.out.println(pageInfo);
         return CommonReturnType.success(pageInfo);
     }
+
 }

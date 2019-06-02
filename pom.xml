@@ -67,6 +67,12 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.11</version>
         </dependency>-->
+        <!-- mybatis-pageable-core -->
+        <dependency>
+            <groupId>com.gitee.hengboy</groupId>
+            <artifactId>mybatis-pageable-core</artifactId>
+            <version>1.0.6.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
